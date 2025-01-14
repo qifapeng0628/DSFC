@@ -13,9 +13,9 @@ python \VAD\inference.py --inference='shbest\iter_300.pkl'
 ```
 |                |Best AUC                          |Model download link                         |
 |----------------|-------------------------------|-----------------------------|
-|ShanghaiTech|`97.87%`            |[link](https://pan.baidu.com/s/1kjPswPqt8i8wEz-3NCl5dg?pwd=7ias)            |
-|UBnormal         |`72.91%`            |[link](https://pan.baidu.com/s/1kjPswPqt8i8wEz-3NCl5dg?pwd=7ias)            |
-|UCF Crime          |`83.50%`|[link](https://pan.baidu.com/s/1kjPswPqt8i8wEz-3NCl5dg?pwd=7ias)|
+|ShanghaiTech|`97.87%`            |[link](https://anonymous.4open.science/r/DSFC-E04C/XXXX)            |
+|UBnormal         |`72.91%`            |[link](https://anonymous.4open.science/r/DSFC-E04C/XXXX)            |
+|UCF Crime          |`83.50%`|[link](https://anonymous.4open.science/r/DSFC-E04C/XXXX)|
 
 
 Link: Stay tuned!!!
