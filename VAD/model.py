@@ -30,15 +30,15 @@ class Model_single(torch.nn.Module):
     def forward(self, inputs, is_training=True):
         # [B , T, 3, 1408]
         # -> mean, std, max
-        #mean = inputs[:, :, 0, :] #shape=(20,max_len,1408),将原特征的第一行拿出来
+        #mean = inputs[:, :, 0, :]
         mean = inputs.mean(dim=2)
         r_mean = mean
         r_mean = F.relu(self.fc1(r_mean))
-        r1 = torch.tanh(self.classifier1(r_mean)) #shape=(20,max_len,1)
+        r1 = torch.tanh(self.classifier1(r_mean))
         if is_training:
             r_mean = self.dropout(r_mean)
-        mean_score = self.sigmoid(self.classifier1(r_mean)) #shape=(20,max_len,1)
-        inputs = inputs.permute(0, 2, 1, 3) # shape = (20,3,max_len,1408)
+        mean_score = self.sigmoid(self.classifier1(r_mean))
+        inputs = inputs.permute(0, 2, 1, 3)
         channel_ft = self.DPF(inputs)
         channel_ft = torch.squeeze(channel_ft, dim=1)
         #channel_score = F.sigmoid(self.classifier2(r_ft))
@@ -73,14 +73,14 @@ class Mix(nn.Module):
         self.w = torch.nn.Parameter(w, requires_grad=True)
         self.mix_block = nn.Sigmoid()
 
-    # 前向传播函数，输入两个特征图 fea1 和 fea2
+
     def forward(self, fea1, fea2):
         mix_factor = self.mix_block(self.w)
         out = fea1 * mix_factor.expand_as(fea1) + fea2 * (1 - mix_factor.expand_as(fea2))
         return out
 
 
-# 定义 Attention 类，基于通道注意力机制的实现
+
 class Attention(nn.Module):
     def __init__(self, channel, b=1, gamma=2):
         super(Attention, self).__init__()
@@ -97,7 +97,7 @@ class Attention(nn.Module):
 
         self.mix = Mix()
 
-    # 前向传播函数
+
     def forward(self, input):
         x = self.avg_pool(input)
         x1 = self.conv1(x.squeeze(-1).transpose(-1, -2)).transpose(-1, -2)
@@ -127,13 +127,13 @@ class spatial_attention(nn.Module):
 
     def forward(self, inputs):
 
-        x_maxpool, _ = torch.max(inputs, dim=1, keepdim=True) #(20,1,max_len,1408)
-        x_avgpool = torch.mean(inputs, dim=1, keepdim=True) #(20,1,max_len,1408)
-        x = torch.cat([x_maxpool, x_avgpool], dim=1) #(20,2,max_len,1408)
+        x_maxpool, _ = torch.max(inputs, dim=1, keepdim=True)
+        x_avgpool = torch.mean(inputs, dim=1, keepdim=True)
+        x = torch.cat([x_maxpool, x_avgpool], dim=1)
         # [b,2,h,w]==>[b,1,h,w]
-        x = self.conv(x) #(20,1,max_len,1408)
+        x = self.conv(x)
         x = self.sigmoid(x)
-        outputs = inputs * x #(20,3,max_len,1408)
+        outputs = inputs * x
 
         return outputs
 

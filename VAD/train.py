@@ -33,9 +33,9 @@ def train(epochs, train_loader, all_test_loader, args, model, optimizer, device,
             [anomaly_features, normaly_features], [anomaly_label, normaly_label], stastics_data = data
             features = torch.cat((anomaly_features.squeeze(0), normaly_features.squeeze(0)), dim=0)
             seq_feature = features[:, :, 0, :] #seq_feature.shape=(20,300,1408)
-            videolabels = torch.cat((anomaly_label.squeeze(0), normaly_label.squeeze(0)), dim=0) #videolabels的shape为（1，2）先1后0
-            seq_len = torch.sum(torch.max(seq_feature.abs(), dim=2)[0] > 0, dim=1).numpy() #shape为（20,）每个视频的有效的片段数量
-            features = features[:, :np.max(seq_len), :, :] #将片段数缩减到seq_len的最大长度,以简化运算,shape=(20,max_len,3,1408)
+            videolabels = torch.cat((anomaly_label.squeeze(0), normaly_label.squeeze(0)), dim=0)
+            seq_len = torch.sum(torch.max(seq_feature.abs(), dim=2)[0] > 0, dim=1).numpy()
+            features = features[:, :np.max(seq_len), :, :]
             # features = torch.from_numpy(features).float().to(device)
             features = features.float().to(device)
             videolabels = videolabels.float().to(device)
@@ -76,7 +76,7 @@ def train(epochs, train_loader, all_test_loader, args, model, optimizer, device,
                                         labels=videolabels,
                                         device=device)
             L_TV = losses.L_TV().cuda()
-            Loss_TV = args.lambda2 * L_TV(R) #原超参数为600
+            Loss_TV = args.lambda2 * L_TV(R)
 
 
             total_loss = float(weights[0])*m_loss + Loss_TV + float(weights[0])*m_loss_mean + float(weights[0])*m_loss_channel + \
