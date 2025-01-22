@@ -1,2 +1,0 @@
-C:\Users\pengq\Desktop\maetz\Video_MAE\UCF_Crime\denseflow\i3d
-C:\Users\pengq\Desktop\maetz\Video_MAE\UCF_Crime\denseflow\UCF_Crime
